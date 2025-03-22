@@ -3,6 +3,7 @@ import pool from "./PoolConnection.js";
 
 const projects = express.Router();
 
+// GET all projects
 projects.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM projects");
@@ -13,6 +14,7 @@ projects.get("/", async (req, res) => {
   }
 });
 
+// GET projects by id
 projects.get("/:id", async (req, res) => {
   const projectId = parseInt(req.params.id);
   try {
@@ -30,22 +32,8 @@ projects.get("/:id", async (req, res) => {
   }
 });
 
-projects.post("/:id", async (req, res) => {
-  const { title, description, live_url, github_url, image_url, user_id} = req.body;
-  user_id = parseInt(user_id)
-  try {
-    const result = await pool.query(
-      "INSERT INTO project (title, description, live_url, github_url, image_url, user_id) VALUES ($1,$2,$3,$4,$5,$6)",
-      [title, description, live_url, github_url, image_url, user_id]
-    );
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.log('Error posting project', error);
-    res.status(500).send("Server error");
-  }
-});
-
-projects.get("/:id", async (req, res) => {
+// DELETE project by ID
+projects.get("/delete/:id", async (req, res) => {
   const projectId = parseInt(req.params.id);
   try {
     const result = await pool.query(

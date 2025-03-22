@@ -30,27 +30,8 @@ userRouter.get('/:id', async (req, res) => {
   }
 });
 
-// POST a new user (Sign-up)
-userRouter.post('/', async (req, res) => {
-  const { username, email, password } = req.body;
-
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const result = await pool.query(
-      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
-      [username, email, hashedPassword]
-    );
-
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-});
-
-userRouter.delete('/:id', async (req, res) => {
+// Delete user by ID
+userRouter.get('/delete/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);

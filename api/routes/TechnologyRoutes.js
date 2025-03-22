@@ -3,6 +3,7 @@ import pool from "./PoolConnection.js";
 
 const technologies = express.Router();
 
+// GET all technologies
 technologies.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM technologies");
@@ -13,6 +14,7 @@ technologies.get("/", async (req, res) => {
   }
 });
 
+// GET technology by ID
 technologies.get("/:id", async (req, res) => {
   const technologyId = parseInt(req.params.id);
   try {
@@ -30,21 +32,8 @@ technologies.get("/:id", async (req, res) => {
   }
 });
 
-technologies.post("/:id", async (req, res) => {
-  const { name } = req.body;
-  try {
-    const result = await pool.query(
-      "INSERT INTO technologies (name) VALUES ($1)",
-      [name]
-    );
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Error posting technology");
-  }
-});
-
-technologies.get("/:id", async (req, res) => {
+// DELETE technology by ID
+technologies.get("/delete/:id", async (req, res) => {
   const technologyId = parseInt(req.params.id);
   try {
     const result = await pool.query(
