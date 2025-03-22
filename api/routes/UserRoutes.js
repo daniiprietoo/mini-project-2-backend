@@ -1,6 +1,5 @@
 import express from 'express';
 import pool from './PoolConnection.js';
-import bcrypt from 'bcrypt';
 
 const userRouter = express.Router();
 
